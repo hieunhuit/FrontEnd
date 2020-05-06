@@ -18,16 +18,18 @@ import styles from 'assets/jss/material-dashboard-react/layouts/adminStyle.js';
 import bgImage from 'assets/img/sidebar-2.jpg';
 import logo from 'assets/img/reactlogo.png';
 import cn from 'classnames';
+import Detail from 'views/Detail/Detail';
 let ps;
 
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
       if (prop.layout === '/admin') {
-        return <Route path={prop.layout + prop.path} component={prop.component} key={key} />;
+        return <Route path={prop.layout + prop.path} component={prop.component} key={key} exact={prop.exact} />;
       }
       return null;
     })}
+    <Route path="/admin/table/detail/:sid/:cid" component={Detail} />
     <Redirect from="/admin" to="/admin/dashboard" />
   </Switch>
 );

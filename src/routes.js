@@ -57,6 +57,7 @@ const dashboardRoutes = [
     icon: 'content_paste',
     component: TableList,
     layout: '/admin',
+    exact: true,
   },
   {
     path: '/typography',
