@@ -41,4 +41,49 @@ const setSelectedEvent = (newSelected) => {
   };
 };
 
-export default { getEvents, getEventsSuccess, setSelectedEvent, getDetailEvent, getDetailEventSuccess };
+const deleteAllEvent = (query) => {
+  return {
+    type: types.DELETE_ALL_EVENTS,
+    payload: {
+      query,
+    },
+  };
+};
+const deleteAllEventSuccess = (sid = '') => {
+  return {
+    type: types.DELETE_ALL_EVENTS_SUCCESS,
+    payload: {
+      sid,
+    },
+  };
+};
+
+const deleteSelectedEvent = (selectedEvents) => {
+  return {
+    type: types.DELETE_SELECTED_EVENT,
+    payload: {
+      selectedEvents,
+    },
+  };
+};
+const deleteSelectedEventSuccess = (selectedEvents) => {
+  return {
+    type: types.DELETE_SELECTED_EVENT_SUCCESS,
+    payload: {
+      selectedEvents,
+    },
+  };
+};
+export default {
+  getEvents,
+  getEventsSuccess,
+  setSelectedEvent,
+  getDetailEvent,
+  getDetailEventSuccess,
+  deleteAllEvent,
+  deleteAllEventSuccess,
+  deleteSelectedEvent,
+  deleteAllEventSuccess,
+  deleteSelectedEvent,
+  deleteSelectedEventSuccess,
+};

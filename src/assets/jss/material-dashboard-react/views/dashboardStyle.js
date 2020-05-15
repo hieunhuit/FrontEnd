@@ -72,6 +72,9 @@ const dashboardStyle = {
       lineHeight: '1',
     },
   },
+  ctChart: {
+    color: 'green',
+  },
 };
 
 export default dashboardStyle;

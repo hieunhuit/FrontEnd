@@ -26,6 +26,7 @@ import RTL from 'layouts/RTL.js';
 import 'assets/css/material-dashboard-react.css?v=1.8.0';
 import { Provider } from 'react-redux';
 import configStore from './redux/configStore.redux';
+import './style.css';
 const hist = createBrowserHistory();
 const store = configStore();
 ReactDOM.render(

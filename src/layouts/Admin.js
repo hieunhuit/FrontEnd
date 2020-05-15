@@ -10,7 +10,7 @@ import Navbar from 'components/Navbars/Navbar.js';
 import Footer from 'components/Footer/Footer.js';
 import Sidebar from 'components/Sidebar/Sidebar.js';
 import FixedPlugin from 'components/FixedPlugin/FixedPlugin.js';
-
+import GlobalLoading from 'components/GlobalLoading/GlobalLoading.js';
 import routes from 'routes.js';
 
 import styles from 'assets/jss/material-dashboard-react/layouts/adminStyle.js';
@@ -19,6 +19,11 @@ import bgImage from 'assets/img/sidebar-2.jpg';
 import logo from 'assets/img/reactlogo.png';
 import cn from 'classnames';
 import Detail from 'views/Detail/Detail';
+import ConfigInterface from 'views/ConfigInterface/ConfigInterface';
+import EditInterface from 'views/EditInterface/EditInterface';
+import { useSelector, useDispatch } from 'react-redux';
+
+import allActions from '../actions/';
 let ps;
 
 const switchRoutes = (
@@ -30,6 +35,8 @@ const switchRoutes = (
       return null;
     })}
     <Route path="/admin/table/detail/:sid/:cid" component={Detail} />
+    <Route path="/admin/interface/config" component={ConfigInterface} />
+    <Route path="/admin/interface/:sid" component={EditInterface} />
     <Redirect from="/admin" to="/admin/dashboard" />
   </Switch>
 );
@@ -37,6 +44,7 @@ const switchRoutes = (
 const useStyles = makeStyles(styles);
 
 export default function Admin({ ...rest }) {
+  const { loading, callSuccess } = useSelector((state) => state.ui);
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -47,6 +55,7 @@ export default function Admin({ ...rest }) {
   const [fixedClasses, setFixedClasses] = React.useState('dropdown show');
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [pcOpen, setPcOpen] = useState(true);
+  const dispatch = useDispatch();
   const handleImageClick = (image) => {
     setImage(image);
   };
@@ -76,6 +85,12 @@ export default function Admin({ ...rest }) {
     }
   };
   // initialize and destroy the PerfectScrollbar plugin
+  React.useEffect(() => {
+    function fetchListInterfaceConfigured() {
+      dispatch(allActions.interfaceActions.getInterface());
+    }
+    fetchListInterfaceConfigured();
+  }, []);
   React.useEffect(() => {
     if (navigator.platform.indexOf('Win') > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
@@ -135,6 +150,7 @@ export default function Admin({ ...rest }) {
           handleFixedClick={handleFixedClick}
           fixedClasses={fixedClasses}
         /> */}
+        {loading && <GlobalLoading />}
       </div>
     </div>
   );

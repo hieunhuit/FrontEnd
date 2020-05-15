@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,6 +18,7 @@ import GridContainer from 'components/Grid/GridContainer.js';
 import Card from 'components/Card/Card.js';
 import ipInt from 'ip-to-int';
 import moment from 'moment';
+import allActions from '../../actions';
 Detail.propTypes = {};
 
 const useStyles = makeStyles({
@@ -58,12 +60,18 @@ const useStyles = makeStyles({
     border: '1px solid',
     padding: '10px',
   },
+  cardHeader: { backgroundColor: '#1d3557' },
 });
 
 function Detail(props) {
   const eventDetail = useSelector((state) => state.events.eventDetail);
+  const { sid, cid } = useParams();
   const classes = useStyles();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(allActions.eventActions.getDetailEvent({ sid, cid }));
+  }, []);
   const renderDetail = () => {
     let xhtml = null;
     if (eventDetail) {
@@ -71,7 +79,7 @@ function Detail(props) {
         <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
-              <CardHeader color="primary">
+              <CardHeader className={classes.cardHeader}>
                 <h4 className={classes.cardTitleWhite}>Meta</h4>
               </CardHeader>
               <CardBody>
@@ -198,7 +206,7 @@ function Detail(props) {
                           <TableBody>
                             <TableRow className={classes.row}>
                               <TableCell className={classes.cell} size="small">
-                                {ipInt(eventDetail.Iphdr.ip_src).toIP()}
+                                {eventDetail.Iphdr.ip_src != 0 ? ipInt(eventDetail.Iphdr.ip_src).toIP() : '0.0.0.0'}
                               </TableCell>
                               <TableCell className={classes.cell} align="center">
                                 {ipInt(eventDetail.Iphdr.ip_dst).toIP()}

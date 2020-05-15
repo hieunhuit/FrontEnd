@@ -28,9 +28,7 @@ import Language from '@material-ui/icons/Language';
 import DashboardPage from 'views/Dashboard/Dashboard.js';
 import UserProfile from 'views/UserProfile/UserProfile.js';
 import TableList from 'views/TableList/TableList.js';
-import Typography from 'views/Typography/Typography.js';
-import Icons from 'views/Icons/Icons.js';
-import Maps from 'views/Maps/Maps.js';
+import Interface from 'views/Interface/Interface.js';
 import NotificationsPage from 'views/Notifications/Notifications.js';
 
 const dashboardRoutes = [
@@ -60,29 +58,15 @@ const dashboardRoutes = [
     exact: true,
   },
   {
-    path: '/typography',
-    name: 'Typography',
+    path: '/interface',
+    name: 'Interface',
     rtlName: 'طباعة',
     icon: LibraryBooks,
-    component: Typography,
+    component: Interface,
     layout: '/admin',
+    exact: true,
   },
-  {
-    path: '/icons',
-    name: 'Icons',
-    rtlName: 'الرموز',
-    icon: BubbleChart,
-    component: Icons,
-    layout: '/admin',
-  },
-  {
-    path: '/maps',
-    name: 'Maps',
-    rtlName: 'خرائط',
-    icon: LocationOn,
-    component: Maps,
-    layout: '/admin',
-  },
+
   {
     path: '/notifications',
     name: 'Notifications',

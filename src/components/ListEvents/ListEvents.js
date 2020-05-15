@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
+
 import Button from '@material-ui/core/Button';
 import cn from 'classnames';
 import ipInt from 'ip-to-int';
@@ -100,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
   wrapperActions: {
     display: 'flex',
     justifyContent: 'space-between',
-    height: '45px',
+    height: '52px',
   },
   button: {
     fontSize: '12px',
@@ -119,7 +120,7 @@ EnhancedTable.defaultProps = {
 export default function EnhancedTable(props) {
   const classes = useStyles();
   const { events, selected, totalRows } = props;
-  const { page, limit } = useSelector((state) => state.filters);
+  const { page, limit, sid } = useSelector((state) => state.filters);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('datetime');
   const dispatch = useDispatch();
@@ -176,9 +177,9 @@ export default function EnhancedTable(props) {
 
     dispatch(allActions.eventActions.setSelectedEvent(newSelected));
   };
-  const handleGetDetail = (id) => {
-    const [sid, cid] = id.split('-');
-    dispatch(allActions.eventActions.getDetailEvent({ sid, cid }));
+
+  const handleDeleteAll = () => {
+    dispatch(allActions.eventActions.deleteAllEvent({ sid }));
   };
 
   return (
@@ -231,7 +232,7 @@ export default function EnhancedTable(props) {
                     </TableCell>
                     <TableCell className={classes.cell} align="left" size="small">
                       {row.protocol === 1 && 'ICMP'}
-                      {row.protocol === 2 && 'TCP'}
+                      {row.protocol === 6 && 'TCP'}
                       {row.protocol === 3 && 'UDP'}
                     </TableCell>
                     <TableCell className={classes.cell} align="left" size="small">
@@ -244,7 +245,7 @@ export default function EnhancedTable(props) {
                       ></div>
                     </TableCell>
                     <TableCell className={classes.cell} align="left" size="small">
-                      {ipInt(row.srcIp).toIP()}
+                      {row.srcIp != 0 ? ipInt(row.srcIp).toIP() : '0.0.0.0'}
                     </TableCell>
                     <TableCell className={classes.cell} align="left" size="small">
                       {ipInt(row.dstIp).toIP()}
@@ -257,7 +258,7 @@ export default function EnhancedTable(props) {
                     </TableCell>
                     <TableCell className={classes.cell} align="left">
                       <NavLink to={`/admin/table/detail/${row.id.split('-')[0]}/${row.id.split('-')[1]}`}>
-                        <IconButton aria-label="detail" onClick={() => handleGetDetail(row.id)}>
+                        <IconButton aria-label="detail">
                           <MoreHorizIcon />
                         </IconButton>
                       </NavLink>
@@ -269,7 +270,7 @@ export default function EnhancedTable(props) {
           </Table>
         </TableContainer>
         <div className={classes.wrapperActions}>
-          <Button color="secondary" size="small" className={classes.button}>
+          <Button color="secondary" size="small" className={classes.button} onClick={handleDeleteAll}>
             Delete All
             <ClearAllIcon></ClearAllIcon>
           </Button>

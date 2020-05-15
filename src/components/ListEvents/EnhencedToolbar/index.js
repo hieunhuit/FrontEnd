@@ -22,11 +22,11 @@ import clsx from 'clsx';
 // core components
 let sensors = [
   {
-    sid: 10,
+    sid: 13,
     interface: 'ens33',
   },
   {
-    sid: 11,
+    sid: 12,
     interface: 'ens38',
   },
 ];
@@ -75,17 +75,16 @@ const useToolbarStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     margin: '10px 10px 0px 0px',
+    clear: 'both',
   },
 }));
 
 const EnhancedTableToolbar = (props) => {
   const { start, end } = useSelector((state) => state.filters);
+  const { interfacesConfigured } = useSelector((state) => state.interfaces);
+  const { selected } = useSelector((state) => state.events);
   const classes = useToolbarStyles();
-  const {
-    numSelected,
-
-    onDelete,
-  } = props;
+  const { numSelected } = props;
   const filters = useSelector((state) => state.filters);
   const { sensor, priority, protocol } = filters;
   const typingTimeOut = React.useRef(null);
@@ -125,17 +124,18 @@ const EnhancedTableToolbar = (props) => {
   };
 
   const handleDelete = () => {
-    if (onDelete) onDelete();
+    dispatch(allActions.eventActions.deleteSelectedEvent(selected));
   };
-  const renderSensor = (sensors) => {
+  const renderSensor = () => {
     let xhtml = null;
-    xhtml = sensors.map((sensor, index) => {
-      return (
-        <MenuItem key={index} value={sensor.sid}>
-          {sensor.interface}
-        </MenuItem>
-      );
-    });
+    if (interfacesConfigured)
+      xhtml = interfacesConfigured.map((sensor, index) => {
+        return (
+          <MenuItem key={index} value={sensor.sid}>
+            {sensor.interface}
+          </MenuItem>
+        );
+      });
     return xhtml;
   };
   return (
@@ -185,7 +185,7 @@ const EnhancedTableToolbar = (props) => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {renderSensor(sensors)}
+              {renderSensor()}
             </Select>
           </FormControl>
         </Tooltip>
@@ -222,7 +222,7 @@ const EnhancedTableToolbar = (props) => {
                 <em>None</em>
               </MenuItem>
               <MenuItem value={1}>ICMP</MenuItem>
-              <MenuItem value={2}>TCP</MenuItem>
+              <MenuItem value={6}>TCP</MenuItem>
               <MenuItem value={3}>UDP</MenuItem>
             </Select>
           </FormControl>
@@ -261,8 +261,8 @@ const EnhancedTableToolbar = (props) => {
         )}
 
         {numSelected > 0 && (
-          <Tooltip title="Delete" onClick={handleDelete}>
-            <IconButton aria-label="delete">
+          <Tooltip title="Delete">
+            <IconButton aria-label="delete" onClick={handleDelete}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
