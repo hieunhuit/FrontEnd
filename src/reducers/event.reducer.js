@@ -31,6 +31,37 @@ const eventReducer = (state = initialStage, action) => {
         selected: newSelected,
       };
     }
+    case types.DELETE_ALL_EVENTS_SUCCESS: {
+      const { sid } = action.payload;
+      if (sid !== '') {
+        return {
+          ...state,
+          listEvent: state.listEvent.filter((event) => event.sid !== sid),
+          selected: [],
+        };
+      }
+
+      return {
+        ...state,
+        listEvent: [],
+        selected: [],
+      };
+    }
+    case types.DELETE_SELECTED_EVENT_SUCCESS: {
+      const { selectedEvents } = action.payload;
+
+      return {
+        ...state,
+        selected: [],
+        listEvent: state.listEvent.filter((event) => {
+          return !selectedEvents.includes(`${event.sid}-${event.cid}`);
+        }),
+        pagination: {
+          ...state.pagination,
+          totalRows: state.pagination.totalRows - selectedEvents.length,
+        },
+      };
+    }
     default:
       return state;
   }

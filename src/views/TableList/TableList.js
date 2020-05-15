@@ -10,6 +10,9 @@ import allActions from '../../actions';
 import Card from 'components/Card/Card.js';
 import CardHeader from 'components/Card/CardHeader.js';
 import CardBody from 'components/Card/CardBody.js';
+import ReloadIcon from '@material-ui/icons/ReplayOutlined';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
 const styles = {
   cardCategoryWhite: {
     '&,& a,& a:hover,& a:focus': {
@@ -38,6 +41,11 @@ const styles = {
       lineHeight: '1',
     },
   },
+  headerWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    backgroundColor: '#1d3557',
+  },
 };
 
 const useStyles = makeStyles(styles);
@@ -58,7 +66,7 @@ export default function TableList() {
   // });
 
   useEffect(() => {
-    async function fetchListEvent() {
+    function fetchListEvent() {
       const query = Object.keys(filters)
         .filter((item) => filters[item])
         .reduce((obj, key) => {
@@ -118,13 +126,19 @@ export default function TableList() {
   // const handleDelete = () => {
   //   console.log(selected);
   // };
+  const handleReload = () => {
+    dispatch(allActions.eventActions.getEvents());
+  };
   return (
     <>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}></GridItem>
         <Card>
-          <CardHeader color="primary">
+          <CardHeader className={classes.headerWrapper}>
             <h4 className={classes.cardTitleWhite}>Event</h4>
+            <IconButton style={{ width: '40px', height: '40px' }} color="inherit" size="small" onClick={handleReload}>
+              <ReloadIcon></ReloadIcon>
+            </IconButton>
           </CardHeader>
           <CardBody>
             <ListEvent selected={selected} events={events} totalRows={totalRows} />
