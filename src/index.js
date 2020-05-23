@@ -19,10 +19,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createBrowserHistory } from 'history';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
-
+import { PrivateRoute } from './components/PrivateRoute/privateRoute';
 // core components
 import Admin from 'layouts/Admin.js';
 import RTL from 'layouts/RTL.js';
+import LoginPage from 'views/Login/Login';
+import RegisterPage from 'views/Register/Register';
 import 'assets/css/material-dashboard-react.css?v=1.8.0';
 import { Provider } from 'react-redux';
 import configStore from './redux/configStore.redux';
@@ -33,9 +35,11 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={hist}>
       <Switch>
-        <Route path="/admin" component={Admin} />
+        <PrivateRoute path="/admin" component={Admin} />
         <Route path="/rtl" component={RTL} />
-        <Redirect from="/" to="/admin/dashboard" />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
+        <Redirect from="/" to="/login" />
       </Switch>
     </Router>
   </Provider>,
