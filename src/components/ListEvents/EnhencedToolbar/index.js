@@ -76,7 +76,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     margin: '10px 10px 0px 0px',
     clear: 'both',
-  },
+  }
 }));
 
 const EnhancedTableToolbar = (props) => {

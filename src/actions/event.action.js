@@ -74,6 +74,35 @@ const deleteSelectedEventSuccess = (selectedEvents) => {
     },
   };
 };
+const getEventLiveMode = (event_livemode) => {
+  return {
+    type: types.GET_EVENT_LIVEMODE,
+    payload: {
+      event_livemode,
+    },
+  }
+};
+const getStatisticalLiveMode = (statistical_livemode)=>{
+  return {
+    type: types.GET_STATISTICAL_LIVEMODE,
+    payload: {
+      statistical_livemode,
+    }
+  }
+};
+const clearLiveModeData = ()=>{
+  return {
+    type: types.GET_EVENT_LIVEMODE_CLEAR
+  }
+};
+const getSysInfoLiveMode = (sysinfo_livemode)=>{
+  return {
+    type: types.GET_SYSINFO_LIVEMODE,
+    payload: {
+      sysinfo_livemode,
+    }
+  }
+};
 export default {
   getEvents,
   getEventsSuccess,
@@ -86,4 +115,8 @@ export default {
   deleteAllEventSuccess,
   deleteSelectedEvent,
   deleteSelectedEventSuccess,
+  getEventLiveMode,
+  getStatisticalLiveMode,
+  clearLiveModeData,
+  getSysInfoLiveMode,
 };

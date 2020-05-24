@@ -22,8 +22,14 @@ import Detail from 'views/Detail/Detail';
 import ConfigInterface from 'views/ConfigInterface/ConfigInterface';
 import EditInterface from 'views/EditInterface/EditInterface';
 import { useSelector, useDispatch } from 'react-redux';
+import { SOCKET_ENDPOINT } from '../constants/index';
 
 import allActions from '../actions/';
+
+import io from 'socket.io-client';
+
+const socket = io(`${SOCKET_ENDPOINT}`+'/webapp');
+
 let ps;
 
 const switchRoutes = (
@@ -42,8 +48,10 @@ const switchRoutes = (
 );
 
 const useStyles = makeStyles(styles);
+export var isOnSite = true;
 
 export default function Admin({ ...rest }) {
+
   const { loading, callSuccess } = useSelector((state) => state.ui);
   // styles
   const classes = useStyles();
@@ -56,6 +64,34 @@ export default function Admin({ ...rest }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [pcOpen, setPcOpen] = useState(true);
   const dispatch = useDispatch();
+
+  socket.on('connect', (connector)=>{
+    console.log('connected');
+  })
+  socket.on('newData', (data)=>{
+    dispatch(allActions.eventActions.getEventLiveMode(data))
+  });
+  socket.emit('getStatisticalLiveMode',{
+    all:true,
+    tcp:true,
+    udp:true,
+    sig_priority:"1",
+    time_require:72
+  });
+  socket.on('setStatistical',(data)=>{
+    dispatch(allActions.eventActions.clearLiveModeData())
+    dispatch(allActions.eventActions.getStatisticalLiveMode(data))
+  })
+
+  setInterval(()=>{
+    if (isOnSite) socket.emit("getSystemInformation")},1000);
+  
+  socket.on("setSystemInformation", (data)=>{
+    // console.log(data)
+    dispatch(allActions.eventActions.getSysInfoLiveMode(data))
+  });
+  
+  
   const handleImageClick = (image) => {
     setImage(image);
   };

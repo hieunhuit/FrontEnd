@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // react plugin for creating charts
-import ChartistGraph from 'react-chartist';
 // @material-ui/core
 import { makeStyles } from '@material-ui/core/styles';
 import Icon from '@material-ui/core/Icon';
@@ -28,6 +27,26 @@ import DoughnutChart from 'components/ChartDonut/ChartDonut';
 import styles from 'assets/jss/material-dashboard-react/views/dashboardStyle.js';
 import cn from 'classnames';
 import InfoPriority from 'components/InfoPriority/InfoPriority';
+import { useSelector, useDispatch } from 'react-redux';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import ipInt from 'ip-to-int';
+import LineChart from 'components/LineChart/LineChart';
+import LineChartStream from 'components/LineChart/LineChartStream';
+import LineChartCPU from 'components/LineChart/LineChartCPU';
+import { SOCKET_ENDPOINT } from '../../constants/index';
+import allActions from '../../actions';
+import io from 'socket.io-client';
+var isOnSite = true;
+
+
+
+const socket = io(`${SOCKET_ENDPOINT}` + '/webapp');
 
 const useStyles = makeStyles({
   ctChart: {
@@ -43,35 +62,96 @@ const useStyles = makeStyles({
     background: 'rgba(255,255,255,.2)',
     flex: '1',
   },
+  tableRowLiveMode: {
+    padding: '0px',
+  },
+  sysInfoLiveMode: {
+    height: '10%',
+    width: '30%'
+  },
+  donutChart: {
+  }
 });
+
 export default function Dashboard() {
   const classes = useStyles();
+  const { listEvent } = useSelector((state) => state.eventLiveMode);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    var callSysInfo = setInterval(() => {
+      socket.emit("getSystemInformation")
+    }, 1000);
+
+    socket.on("setSystemInformation", (data) => {
+      // console.log(data)
+      dispatch(allActions.eventActions.getSysInfoLiveMode(data))
+    });
+    return () => {
+      console.log("cleare")
+      clearInterval(callSysInfo);
+    }
+  }, [])
   return (
     <div>
       <GridContainer>
         <InfoPriority />
       </GridContainer>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
-          <Card chart>
-            <CardHeader>
-              <h4>RealTime</h4>
-            </CardHeader>
+        <GridItem xs={6} sm={6} md={4}>
+          <Card>
             <CardBody>
-              <ChartistGraph
-                className={cn(classes.ctChart, 'ct-line')}
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
+              <LineChart type='cpu' />
             </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter>
           </Card>
+        </GridItem>
+        <GridItem xs={6} sm={6} md={4}>
+          <Card>
+            <CardBody>
+              <LineChart  type='mem_percent' />
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem xs={6} sm={6} md={4}>
+          <Card>
+            <CardBody>
+              <LineChart  type='disk_used' />
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem xs={6} sm={6} md={4}>
+          <Card>
+            <CardBody>
+              <LineChartStream type='net_used_tx' />
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={8}>
+          <TableContainer component={Paper} >
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>PRIORITY</TableCell>
+                  <TableCell>SRC IP</TableCell>
+                  <TableCell>DST IP</TableCell>
+                  <TableCell>MESSAGE</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {listEvent.map((row) => {
+                  return (
+                    <TableRow >
+                      <TableCell className={classes.tableRowLiveMode}>{row.sid}-{row.cid}</TableCell>
+                      <TableCell className={classes.tableRowLiveMode}>{row.sig_priority}</TableCell>
+                      <TableCell className={classes.tableRowLiveMode}>{ipInt(row.ip_src).toIP()}</TableCell>
+                      <TableCell className={classes.tableRowLiveMode}>{ipInt(row.ip_dst).toIP()}</TableCell>
+                      <TableCell className={classes.tableRowLiveMode}>{row.sig_name}</TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card>
@@ -80,6 +160,7 @@ export default function Dashboard() {
             </CardBody>
           </Card>
         </GridItem>
+
       </GridContainer>
     </div>
   );
