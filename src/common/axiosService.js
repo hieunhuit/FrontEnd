@@ -9,13 +9,15 @@ class AxiosService {
     return response;
   };
   handleError = (error) => {
+    if (401 === error.response.status) {
+      throw new Error('Email or password incorrect');
+    }
     return Promise.reject(error);
   };
   get(url, config = {}) {
     return this.instance.get(url, config);
   }
   post(url, body, config = {}) {
-    console.log('post');
     return this.instance.post(url, body, config);
   }
   put(url, body, config = {}) {

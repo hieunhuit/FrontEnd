@@ -150,10 +150,10 @@ function* deleteRuleSaga({ payload }) {
   yield put(allAction.uiActions.hideLoading());
 }
 function* createRuleSaga({ payload }) {
-  const { sid, rule } = payload;
-  console.log(sid, rule);
+  const { sid, rules } = payload;
+
   yield put(allAction.uiActions.showLoading());
-  const res = yield call(_createRule, sid, rule);
+  const res = yield call(_createRule, sid, rules);
   const { status, data: dataRes } = res;
   if (status === STATUS_CODE.CREATE) {
     yield put(allAction.ruleActions.createRuleSuccess(dataRes.data));
@@ -191,14 +191,18 @@ function* loginWithFacebookSaga({ payload }) {
 }
 
 function* loginSaga({ payload }) {
-  const { data, history, from } = payload;
-  const res = yield call(_login, data);
-  const { status, data: dataRes, headers } = res;
-  if (status === STATUS_CODE.SUCCESS) {
-    yield call(setToken, headers['authorization']);
-    history.push(from);
+  try {
+    const { data, history, from } = payload;
+    const res = yield call(_login, data);
+    const { status, data: dataRes, headers } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield call(setToken, headers['authorization']);
+      yield put(allAction.authActions.loginSuccess());
+      history.push(from);
+    }
+  } catch (error) {
+    yield put(allAction.authActions.loginFail(error.message));
   }
-  console.log(res.data);
 }
 function* registerSaga({ payload }) {
   const { data, history } = payload;

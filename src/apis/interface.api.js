@@ -57,10 +57,10 @@ export const _deleteRule = (sid, id) => {
     },
   });
 };
-export const _createRule = (sid, rule) => {
+export const _createRule = (sid, rules) => {
   return axiosService.post(
     `${API_ENDPOINT}/${url_interface}/${sid}/rules`,
-    { rules: rule },
+    { rules: rules },
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,

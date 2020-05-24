@@ -34,20 +34,20 @@ const deleteRuleSuccess = (sid, id) => {
     },
   };
 };
-const createRule = (sid, rule) => {
+const createRule = (sid, rules) => {
   return {
     type: types.CREATE_RULE,
     payload: {
-      rule,
+      rules,
       sid,
     },
   };
 };
-const createRuleSuccess = (rule) => {
+const createRuleSuccess = (rules) => {
   return {
     type: types.CREATE_RULE_SUCCESS,
     payload: {
-      rule,
+      rules,
     },
   };
 };

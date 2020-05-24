@@ -26,8 +26,8 @@ const ruleReducer = (state = initialState, action) => {
       };
     }
     case types.CREATE_RULE_SUCCESS: {
-      const { rule } = action.payload;
-      let newArr = [...state.listRules, rule];
+      const { rules } = action.payload;
+      let newArr = [...state.listRules, ...rules];
       return {
         ...state,
         listRules: newArr,

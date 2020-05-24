@@ -1,5 +1,5 @@
-import React from './node_modules/react';
-import { Line } from './node_modules/react-chartjs-2';
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 
 const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],

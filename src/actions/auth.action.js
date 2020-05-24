@@ -33,6 +33,15 @@ const loginSuccess = () => {
     type: types.LOGIN_SUCCESS,
   };
 };
+const loginFail = (msg) => {
+  return {
+    type: types.LOGIN_FAIL,
+    payload: {
+      msg,
+    },
+  };
+};
+
 const register = (data) => {
   return {
     type: types.REGISTER,
@@ -51,6 +60,7 @@ export default {
   loginWithFacebookSuccess,
   login,
   loginSuccess,
+  loginFail,
   register,
   registerSuccess,
 };

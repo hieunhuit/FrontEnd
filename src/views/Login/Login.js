@@ -6,7 +6,7 @@ import imagine4 from 'assets/img/img_avatar2.png';
 import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -77,18 +77,26 @@ const useStyles = makeStyles({
   signup: {
     margin: '10px 0px',
   },
+  error: {
+    color: 'red',
+    marginTop: '-10px',
+    textAlign: 'left',
+    paddingLeft: '80px',
+  },
+  showError: {
+    display: 'block',
+  },
 });
 function Login(props) {
   const classes = useStyles();
   const { history } = props;
   let { from } = props.location.state || { from: { pathname: '/admin/dashboard' } };
-
+  const { errorMsg } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [login, setLogin] = useState(false);
   const [data, setData] = useState({});
   const [picture, setPicture] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
   const { handleSubmit, register, errors } = useForm();
   const responseFacebook = (response) => {
     setData(response);
@@ -101,16 +109,9 @@ function Login(props) {
     }
   };
   const onSubmit = (values) => {
-    dispatch(allActions.authActions.login(values, history, from));
+    if (!errors.email) dispatch(allActions.authActions.login(values, history, from));
   };
-  const handleEmailChange = (event) => {
-    let value = event.target.value;
-    setEmail(value);
-  };
-  const handlePasswordChange = (event) => {
-    let value = event.target.value;
-    setPassword(value);
-  };
+
   return (
     <div className={classes.background}>
       <Card className={classes.root}>
@@ -123,32 +124,38 @@ function Login(props) {
             <div className={cn(classes.justifyCenter, 'form-row')}>
               <div className="form-group col-8">
                 <input
-                  onChange={handleEmailChange}
-                  value={email}
-                  type="email"
+                  defaultValue=""
                   placeholder="Enter email"
                   name="email"
                   class="form-control"
-                  ref={register({})}
-                  required
-                />
-              </div>
-            </div>
-            <div className={cn(classes.justifyCenter, 'form-row')}>
-              <div className="form-group col-8">
-                <input
-                  onChange={handlePasswordChange}
-                  value={password}
-                  type="text"
-                  placeholder="Enter password"
-                  name="password"
-                  class="form-control"
-                  ref={register({})}
-                  required
+                  ref={register({
+                    required: true,
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: 'invalid email address',
+                    },
+                  })}
                 />
               </div>
             </div>
 
+            <div className={cn(classes.justifyCenter, 'form-row')}>
+              <div className="form-group col-8">
+                <input
+                  defaultValue=""
+                  type="text"
+                  placeholder="Enter password"
+                  name="password"
+                  class="form-control"
+                  ref={register({
+                    required: true,
+                  })}
+                />
+              </div>
+            </div>
+            {errors.password && <div className={classes.error}>{errors.password.message}</div>}
+            {errors.email && <div className={classes.error}>{errors.email.message}</div>}
+            {errorMsg && <div className={classes.error}>{errorMsg}</div>}
             <div className={cn(classes.justifyCenter, 'form-row')}>
               <div className="form-group col-8">
                 <button

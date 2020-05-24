@@ -28,7 +28,7 @@ import DoughnutChart from 'components/ChartDonut/ChartDonut';
 import styles from 'assets/jss/material-dashboard-react/views/dashboardStyle.js';
 import cn from 'classnames';
 import InfoPriority from 'components/InfoPriority/InfoPriority';
-
+import LineChart from 'components/LineChart/LineChart';
 const useStyles = makeStyles({
   ctChart: {
     backgroundColor: '#3bc0c3',
