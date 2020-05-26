@@ -30,7 +30,6 @@ import UserProfile from 'views/UserProfile/UserProfile.js';
 import TableList from 'views/TableList/TableList.js';
 import Interface from 'views/Interface/Interface.js';
 import NotificationsPage from 'views/Notifications/Notifications.js';
-import LoginPage from 'views/Login/Login.js';
 
 const dashboardRoutes = [
   {

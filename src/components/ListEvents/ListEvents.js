@@ -134,9 +134,8 @@ export default function EnhancedTable(props) {
       event.Iphdr.ip_dst,
       event.Signature.SigClass.sig_class_name,
       event.Signature.sig_name,
-    ),
+    )
   );
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     console.log(property);
@@ -199,7 +198,6 @@ export default function EnhancedTable(props) {
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-                
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (

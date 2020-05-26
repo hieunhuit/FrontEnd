@@ -11,18 +11,18 @@ class AxiosService {
   handleError = (error) => {
     return Promise.reject(error);
   };
-  get(url, config = {}) {
-    return this.instance.get(url, config);
+  get(url) {
+    return this.instance.get(url);
   }
-  post(url, body, config = {}) {
+  post(url, body) {
     console.log('post');
-    return this.instance.post(url, body, config);
+    return this.instance.post(url, body);
   }
-  put(url, body, config = {}) {
-    return this.instance.put(url, body, config);
+  put(url, body) {
+    return this.instance.put(url, body);
   }
-  delete(url, config = {}) {
-    return this.instance.delete(url, config);
+  delete(url) {
+    return this.instance.delete(url);
   }
 }
 

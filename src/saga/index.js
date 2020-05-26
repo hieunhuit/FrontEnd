@@ -10,14 +10,9 @@ import {
   _createRule,
   _updateRule,
 } from '../apis/interface.api';
-import { _loginWithFacebook, _login } from '../apis/auth.api';
-import { _register } from '../apis/user.api';
 import * as types from '../constants/actionType.constants';
 import { STATUS_CODE } from '../constants/status.constants';
 import allAction from '../actions/';
-function setToken(token) {
-  localStorage.setItem('token', token);
-}
 function* getEventsSaga({ payload }) {
   const { query } = payload;
 
@@ -177,39 +172,6 @@ function* updateRuleSaga({ payload }) {
   yield delay(1000);
   yield put(allAction.uiActions.hideLoading());
 }
-function* loginWithFacebookSaga({ payload }) {
-  const { data, history, from } = payload;
-
-  const res = yield call(_loginWithFacebook, data);
-  const { status, data: dataRes, headers } = res;
-
-  if (status === STATUS_CODE.SUCCESS) {
-    yield call(setToken, headers['authorization']);
-    history.push(from);
-  }
-  console.log(res.data);
-}
-
-function* loginSaga({ payload }) {
-  const { data, history, from } = payload;
-  const res = yield call(_login, data);
-  const { status, data: dataRes, headers } = res;
-  if (status === STATUS_CODE.SUCCESS) {
-    yield call(setToken, headers['authorization']);
-    history.push(from);
-  }
-  console.log(res.data);
-}
-function* registerSaga({ payload }) {
-  const { data, history } = payload;
-  const res = yield call(_register, data);
-  console.log({ res });
-  const { status, data: dataRes } = res;
-  if (status === STATUS_CODE.CREATE) {
-    console.log('register success');
-    history.push('/login');
-  }
-}
 function* rootSaga() {
   yield takeLatest(types.GET_EVENTS, getEventsSaga);
   yield takeLatest(types.GET_DETAIL_EVENT, getDetailEventSaga);
@@ -224,9 +186,6 @@ function* rootSaga() {
   yield takeLatest(types.DELETE_RULES, deleteRuleSaga);
   yield takeLatest(types.CREATE_RULE, createRuleSaga);
   yield takeLatest(types.UPDATE_RULE, updateRuleSaga);
-  yield takeLatest(types.LOGIN_WITH_FACEBOOK, loginWithFacebookSaga);
-  yield takeLatest(types.LOGIN, loginSaga);
-  yield takeLatest(types.REGISTER, registerSaga);
 }
 
 export default rootSaga;

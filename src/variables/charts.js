@@ -14,25 +14,30 @@ var delays2 = 80,
 // ##############################
 // // // Daily Sales
 // #############################
-
 const dailySalesChart = {
   data: {
-    labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-    series: [[1200, 1700, 700, 1700, 2300, 1800, 15000]],
+    labels: [],
+    series: [[10,20,30,40,50,60]],
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 0,
+      tension: 2,
     }),
     height: '300px',
     low: 0,
-    high: 50000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+    high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
     chartPadding: {
-      top: 0,
+      top: 20,
       right: 0,
       bottom: 0,
       left: 0,
     },
+    showArea: true,
+    showPoint: false,
+    axisY: {
+      scaleMinSpace: 10,
+      onlyInteger: true
+    }
   },
   // for animation
   animation: {

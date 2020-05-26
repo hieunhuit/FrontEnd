@@ -8,20 +8,12 @@ export const _getEvents = (params = {}) => {
   if (Object.keys(params).length > 0) {
     queryParams = `?${qs.stringify(params)}`;
   }
-  return axiosService.get(`${API_ENDPOINT}/${url_event}${queryParams}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  });
+  return axiosService.get(`${API_ENDPOINT}/${url_event}${queryParams}`);
 };
 
 export const _getDetailEvent = (params) => {
   const { sid, cid } = params;
-  return axiosService.get(`${API_ENDPOINT}/${url_event}/${sid}/${cid}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  });
+  return axiosService.get(`${API_ENDPOINT}/${url_event}/${sid}/${cid}`);
 };
 
 export const _deleteAllEvent = (params = {}) => {
@@ -29,21 +21,9 @@ export const _deleteAllEvent = (params = {}) => {
   if (Object.keys(params).length > 0) {
     queryParams = `?${qs.stringify(params)}`;
   }
-  return axiosService.delete(`${API_ENDPOINT}/${url_event}${queryParams}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  });
+  return axiosService.delete(`${API_ENDPOINT}/${url_event}${queryParams}`);
 };
 export const _deleteSelectedEvents = (selectedEvents) => {
   selectedEvents = selectedEvents.join('#');
-  return axiosService.post(
-    `${API_ENDPOINT}/${url_event}`,
-    { selectedEvents },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    },
-  );
+  return axiosService.post(`${API_ENDPOINT}/${url_event}`, { selectedEvents });
 };

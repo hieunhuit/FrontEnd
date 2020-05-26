@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
 import { faSkull, faExclamation, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSelector } from 'react-redux';
 InfoPriority.propTypes = {};
 const useStyles = makeStyles({
   iconPriority: {
@@ -19,32 +20,20 @@ const useStyles = makeStyles({
 });
 function InfoPriority(props) {
   const classes = useStyles();
+  const { tcp, udp,icmp, all,priority_1, priority_2,priority_3 } = useSelector((state) => state.statisticalLiveMode);
   return (
     <>
-      <GridItem xs={12} sm={6} md={3}>
-        <a href="#" class="card bg-pink">
-          <div class="card-body widget-style-2">
-            <div class="text-white media">
-              <div class="media-body align-self-center">
-                <h2 class="my-0 text-white">
-                  <span data-plugin="counterup">50</span>
-                </h2>
-                <p class="mb-0">Daily Visits</p>
-              </div>
-              <FontAwesomeIcon icon={faSkull} className={classes.iconPriority} />
-            </div>
-          </div>
-        </a>
-      </GridItem>
       <GridItem xs={12} sm={6} md={3}>
         <a href="#" class="card bg-danger">
           <div class="card-body widget-style-2">
             <div class="text-white media">
               <div class="media-body align-self-center">
                 <h2 class="my-0 text-white">
-                  <span data-plugin="counterup">50</span>
+                  {
+                    <span>{priority_1}</span>
+                  }
                 </h2>
-                <p class="mb-0">Daily Visits</p>
+                <p class="mb-0">Danger</p>
               </div>
               <FontAwesomeIcon icon={faSkull} className={classes.iconPriority} />
             </div>
@@ -52,14 +41,34 @@ function InfoPriority(props) {
         </a>
       </GridItem>
       <GridItem xs={12} sm={6} md={3}>
+        <a href="#" class="card bg-pink">
+          <div class="card-body widget-style-2">
+            <div class="text-white media">
+              <div class="media-body align-self-center">
+                <h2 class="my-0 text-white">
+                {
+                    <span>{priority_2}</span>
+                  }
+                </h2>
+                <p class="mb-0">Warning</p>
+              </div>
+              <FontAwesomeIcon icon={faSkull} className={classes.iconPriority} />
+            </div>
+          </div>
+        </a>
+      </GridItem>
+
+      <GridItem xs={12} sm={6} md={3}>
         <a class="card bg-warning">
           <div class="card-body widget-style-2">
             <div class="text-white media">
               <div class="media-body align-self-center">
                 <h2 class="my-0 text-white">
-                  <span data-plugin="counterup">50</span>
+                {
+                    <span>{priority_3}</span>
+                  }
                 </h2>
-                <p class="mb-0">Daily Visits</p>
+                <p class="mb-0">Alert</p>
               </div>
               <FontAwesomeIcon icon={faExclamation} className={classes.iconPriority} />
             </div>
@@ -72,7 +81,9 @@ function InfoPriority(props) {
             <div class="text-white media">
               <div class="media-body align-self-center">
                 <h2 class="my-0 text-white">
-                  <span data-plugin="counterup">50</span>
+                  {
+                    <span>{all}</span>
+                  }
                 </h2>
                 <p class="mb-0">Daily Visits</p>
               </div>
