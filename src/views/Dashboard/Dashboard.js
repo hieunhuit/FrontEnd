@@ -52,19 +52,24 @@ export default function Dashboard() {
         <InfoPriority />
       </GridContainer>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
-          <Card chart>
-            <CardHeader>
-              <h4>RealTime</h4>
-            </CardHeader>
+        <GridItem xs={6} sm={6} md={4}>
+          <Card>
             <CardBody>
-              <ChartistGraph
-                className={cn(classes.ctChart, 'ct-line')}
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
+              <LineChart type='cpu' />
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem xs={6} sm={6} md={4}>
+          <Card>
+            <CardBody>
+              <LineChart  type='mem_percent' />
+            </CardBody>
+          </Card>
+        </GridItem>
+        <GridItem xs={6} sm={6} md={4}>
+          <Card>
+            <CardBody>
+              <LineChartStream type='net_used_tx' />
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
